@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+  <defs>
+    <linearGradient id="lensGrad" x1="10" y1="10" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+  <!-- Background squircle -->
+  <rect x="4" y="4" width="112" height="112" rx="28" fill="#090d16" stroke="#1e293b" stroke-width="2" />
+  
+  <!-- Outer Focus Ring -->
+  <circle cx="56" cy="56" r="34" stroke="url(#ringGrad)" stroke-width="3" stroke-dasharray="6 3" opacity="0.75" />
+  
+  <!-- Inner Lens Aperture -->
+  <circle cx="56" cy="56" r="24" stroke="url(#lensGrad)" stroke-width="4" fill="#0f172a" fill-opacity="0.8" />
+  <circle cx="56" cy="56" r="14" fill="#1e293b" />
+  <circle cx="56" cy="56" r="6" fill="#38bdf8" />
+  
+  <!-- WebRTC Signal Waves -->
+  <path d="M 56 38 A 18 18 0 0 1 74 56" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9" />
+  <path d="M 56 46 A 10 10 0 0 1 66 56" stroke="#818cf8" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9" />
+  
+  <!-- Network Nodes (ICE / STUN / TURN) -->
+  <circle cx="34" cy="38" r="3.5" fill="#10b981" />
+  <circle cx="78" cy="38" r="3.5" fill="#f59e0b" />
+  <circle cx="56" cy="80" r="3.5" fill="#ec4899" />
+  
+  <!-- Connection Tracks -->
+  <line x1="34" y1="38" x2="44" y2="48" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
+  <line x1="78" y1="38" x2="68" y2="48" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
+  <line x1="56" y1="80" x2="56" y2="70" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
+
+  <!-- Lens Glint Handle -->
+  <line x1="80" y1="80" x2="104" y2="104" stroke="url(#lensGrad)" stroke-width="6" stroke-linecap="round" />
+</svg>

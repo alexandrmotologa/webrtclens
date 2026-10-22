@@ -1,0 +1,36 @@
+v=0
+o=- 918239182391 2 IN IP4 127.0.0.1
+s=WebRTCLens P2P Call
+t=0 0
+a=group:BUNDLE 0 1
+m=audio 9 UDP/TLS/RTP/SAVPF 111
+c=IN IP4 0.0.0.0
+a=rtcp:9 IN IP4 0.0.0.0
+a=ice-ufrag:r8Xz
+a=ice-pwd:mP2aK9vL1cO0tQ5w
+a=ice-options:trickle
+a=fingerprint:sha-256 5B:99:12:AA:77:43:21:00:EE:FF:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88
+a=setup:active
+a=mid:0
+a=sendrecv
+a=rtcp-mux
+a=rtpmap:111 opus/48000/2
+a=fmtp:111 minptime=10;useinbandfec=1
+m=video 9 UDP/TLS/RTP/SAVPF 96 97
+c=IN IP4 0.0.0.0
+a=rtcp:9 IN IP4 0.0.0.0
+a=ice-ufrag:r8Xz
+a=ice-pwd:mP2aK9vL1cO0tQ5w
+a=ice-options:trickle
+a=fingerprint:sha-256 5B:99:12:AA:77:43:21:00:EE:FF:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88
+a=setup:active
+a=mid:1
+a=sendrecv
+a=rtcp-mux
+a=rtcp-rsize
+a=rtpmap:96 VP8/90000
+a=rtcp-fb:96 goog-remb
+a=rtcp-fb:96 nack
+a=rtcp-fb:96 nack pli
+a=rtpmap:97 rtx/90000
+a=fmtp:97 apt=96
