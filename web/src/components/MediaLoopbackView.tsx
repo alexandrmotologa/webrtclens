@@ -33,9 +33,22 @@ export const MediaLoopbackView: React.FC = () => {
   const pcAnswerRef = useRef<RTCPeerConnection | null>(null);
   const animFrameRef = useRef<number | null>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+  const delayNodeRef = useRef<DelayNode | null>(null);
   const statsIntervalRef = useRef<any>(null);
+  const lossPercentRef = useRef<number>(lossPercent);
 
-  // Canvas drawing loop
+  useEffect(() => {
+    lossPercentRef.current = lossPercent;
+  }, [lossPercent]);
+
+  useEffect(() => {
+    if (delayNodeRef.current && audioCtxRef.current) {
+      const effectiveDelaySec = Math.max(0, Math.min(2.0, (latencyMs + (jitterMs > 0 ? (Math.random() - 0.5) * jitterMs : 0)) / 1000));
+      delayNodeRef.current.delayTime.setValueAtTime(effectiveDelaySec, audioCtxRef.current.currentTime);
+    }
+  }, [latencyMs, jitterMs]);
+
+  // Canvas drawing loop with real frame drop chaos
   useEffect(() => {
     let frameIdx = 0;
     const canvas = canvasRef.current;
@@ -44,9 +57,15 @@ export const MediaLoopbackView: React.FC = () => {
     if (!ctx) return;
 
     const render = () => {
+      animFrameRef.current = requestAnimationFrame(render);
+
+      // Real chaos injection: frame dropping based on configured loss percentage
+      if (lossPercentRef.current > 0 && Math.random() * 100 < lossPercentRef.current) {
+        return; // Skip rendering frame on canvas, inducing real frame loss in captureStream
+      }
+
       frameIdx++;
       drawTestPattern(ctx, canvas.width, canvas.height, frameIdx, performance.now());
-      animFrameRef.current = requestAnimationFrame(render);
     };
 
     render();
@@ -74,14 +93,20 @@ export const MediaLoopbackView: React.FC = () => {
 
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
+      const delayNode = audioCtx.createDelay(2.0);
+      delayNodeRef.current = delayNode;
       const dest = audioCtx.createMediaStreamDestination();
 
       osc.type = 'sine';
       osc.frequency.setValueAtTime(440, audioCtx.currentTime); // 440 Hz Concert A
       gain.gain.setValueAtTime(audioEnabled ? 0.15 : 0.0, audioCtx.currentTime);
 
+      const effectiveDelaySec = Math.max(0, Math.min(2.0, (latencyMs + (jitterMs > 0 ? (Math.random() - 0.5) * jitterMs : 0)) / 1000));
+      delayNode.delayTime.setValueAtTime(effectiveDelaySec, audioCtx.currentTime);
+
       osc.connect(gain);
-      gain.connect(dest);
+      gain.connect(delayNode);
+      delayNode.connect(dest);
       osc.start();
 
       const combinedStream = new MediaStream();
@@ -156,22 +181,19 @@ export const MediaLoopbackView: React.FC = () => {
           const computedKbps = Math.round(((deltaBytes * 8) / timeDiffSec / 1000) * 10) / 10;
           const computedFps = Math.round(Math.max(0, framesVal - lastFrames) / timeDiffSec);
 
-          // Apply artificial chaos factors to reported metrics
-          const displayedJitter = jitterVal + jitterMs;
-          const displayedLoss = packetsLostCount + Math.round((lossPercent / 100) * 15);
-
-          setBitrateKbps(computedKbps > 0 ? computedKbps : 480);
-          setJitterTimeMs(displayedJitter);
-          setPacketsLost(displayedLoss);
-          setFps(computedFps > 0 ? Math.min(30, computedFps) : 30);
+          // Report authentic WebRTC RTCStatsReport metrics directly from browser stack
+          setBitrateKbps(computedKbps);
+          setJitterTimeMs(jitterVal);
+          setPacketsLost(packetsLostCount);
+          setFps(computedFps);
 
           setHistory((prev) => [
             ...prev.slice(-24),
             {
               time: Math.round(now),
-              bitrate: computedKbps > 0 ? computedKbps : 480,
-              jitter: displayedJitter,
-              packetLoss: displayedLoss,
+              bitrate: computedKbps,
+              jitter: jitterVal,
+              packetLoss: packetsLostCount,
             },
           ]);
         }
