@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/logo.svg" width="100" alt="WebRTCLens Logo" />
+  <img src="docs/images/logo.png?raw=true" alt="WebRTCLens Logo" width="130" style="border-radius: 24px;" />
 </p>
 
 <h1 align="center">WebRTCLens</h1>
@@ -31,6 +31,20 @@ WebRTCLens is a local developer studio and command-line inspector for real-time 
 ## Live Demo & Visuals
 
 ![WebRTCLens Demo](docs/images/webrtclens_demo.gif)
+
+### Studio Workbenches
+
+| SDP Diff Studio & Codec Matrix | STUN & TURN Protocol Prober |
+|---|---|
+| ![SDP Diff Studio](docs/images/webrtclens-1.png) | ![STUN / TURN Prober](docs/images/webrtclens-2.png) |
+
+| RFC 5780 NAT Compatibility Matrix | ICE Candidate Waterfall & Topology |
+|---|---|
+| ![NAT Matrix](docs/images/webrtclens-3.png) | ![ICE Waterfall](docs/images/webrtclens-4.png) |
+
+| Media Loopback & Chaos Simulation | RFC Health & Compliance Auditor |
+|---|---|
+| ![Media Loopback](docs/images/webrtclens-5.png) | ![Compliance Audit](docs/images/webrtclens-6.png) |
 
 ---
 

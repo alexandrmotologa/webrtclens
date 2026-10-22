@@ -1,40 +1,149 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <defs>
-    <linearGradient id="lensGrad" x1="10" y1="10" x2="110" y2="110" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#06b6d4" />
-      <stop offset="50%" stop-color="#3b82f6" />
-      <stop offset="100%" stop-color="#8b5cf6" />
-    </linearGradient>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#6366f1" />
-    </linearGradient>
-  </defs>
-  <!-- Background squircle -->
-  <rect x="4" y="4" width="112" height="112" rx="28" fill="#090d16" stroke="#1e293b" stroke-width="2" />
-  
-  <!-- Outer Focus Ring -->
-  <circle cx="56" cy="56" r="34" stroke="url(#ringGrad)" stroke-width="3" stroke-dasharray="6 3" opacity="0.75" />
-  
-  <!-- Inner Lens Aperture -->
-  <circle cx="56" cy="56" r="24" stroke="url(#lensGrad)" stroke-width="4" fill="#0f172a" fill-opacity="0.8" />
-  <circle cx="56" cy="56" r="14" fill="#1e293b" />
-  <circle cx="56" cy="56" r="6" fill="#38bdf8" />
-  
-  <!-- WebRTC Signal Waves -->
-  <path d="M 56 38 A 18 18 0 0 1 74 56" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9" />
-  <path d="M 56 46 A 10 10 0 0 1 66 56" stroke="#818cf8" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9" />
-  
-  <!-- Network Nodes (ICE / STUN / TURN) -->
-  <circle cx="34" cy="38" r="3.5" fill="#10b981" />
-  <circle cx="78" cy="38" r="3.5" fill="#f59e0b" />
-  <circle cx="56" cy="80" r="3.5" fill="#ec4899" />
-  
-  <!-- Connection Tracks -->
-  <line x1="34" y1="38" x2="44" y2="48" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
-  <line x1="78" y1="38" x2="68" y2="48" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
-  <line x1="56" y1="80" x2="56" y2="70" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.6" />
+    <clipPath id="squircle-clip">
+      <rect x="24" y="24" width="976" height="976" rx="220" />
+    </clipPath>
 
-  <!-- Lens Glint Handle -->
-  <line x1="80" y1="80" x2="104" y2="104" stroke="url(#lensGrad)" stroke-width="6" stroke-linecap="round" />
+    <linearGradient id="cyan-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5ff"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+
+    <linearGradient id="cyan-core" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#00f5ff"/>
+    </linearGradient>
+
+    <linearGradient id="amber-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+
+    <linearGradient id="dark-facet-l" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+
+    <linearGradient id="dark-facet-r" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <linearGradient id="obsidian-deep" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+
+    <filter id="subtle-shadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#090d16" flood-opacity="0.16" />
+    </filter>
+  </defs>
+
+  <!-- Luxury White Squircle Container -->
+  <rect x="24" y="24" width="976" height="976" rx="220" fill="#ffffff" stroke="#e2e8f0" stroke-width="6" />
+
+  <g clip-path="url(#squircle-clip)">
+    <g transform="translate(512, 512)" filter="url(#subtle-shadow)">
+
+      <!-- Hexagonal Architectural Gateway Frame -->
+      <polygon points="
+        0,-410
+        355,-205
+        355,205
+        0,410
+        -355,205
+        -355,-205
+      " fill="none" stroke="#0f172a" stroke-width="36" stroke-linejoin="round" />
+
+      <!-- Inner Concentric Hexagon with Cyan Dash -->
+      <polygon points="
+        0,-375
+        324,-187
+        324,187
+        0,375
+        -324,187
+        -324,-187
+      " fill="none" stroke="#00f5ff" stroke-width="5" opacity="0.45" stroke-dasharray="18, 14" />
+
+      <!-- Outer Signaling Concentric Radar Arcs -->
+      <path d="M -260,-240 A 354 354 0 0 1 260,-240" fill="none" stroke="url(#cyan-glow)" stroke-width="4" stroke-dasharray="8 8" opacity="0.35" />
+      <path d="M -200,-280 A 344 344 0 0 1 200,-280" fill="none" stroke="url(#cyan-glow)" stroke-width="3" opacity="0.25" />
+
+      <!-- 100% Watertight Solid Base Silhouette (Zero-Leak Rule) -->
+      <path d="
+        M 0,-270
+        L 90,-210 L 195,-220 L 260,-120 L 240,-10 L 275,120 L 210,260 L 120,310 L 0,335
+        L -120,310 L -210,260 L -275,120 L -240,-10 L -260,-120 L -195,-220 L -90,-210
+        Z
+      " fill="#0b0f19" />
+
+      <!-- Outer Symmetrical Obsidian Armor Facets -->
+      <!-- Left Brow & Crown -->
+      <polygon points="0,-270 -90,-210 -195,-220 -140,-140 0,-180" fill="url(#dark-facet-l)" />
+      <!-- Right Brow & Crown -->
+      <polygon points="0,-270 90,-210 195,-220 140,-140 0,-180" fill="url(#dark-facet-r)" />
+
+      <!-- Forehead Central Diamond Core -->
+      <polygon points="0,-180 65,-110 0,-50 -65,-110" fill="#0f172a" stroke="#00f5ff" stroke-width="3" />
+      <circle cx="0" cy="-110" r="10" fill="url(#cyan-glow)" />
+
+      <!-- Left Crest Wing Plates -->
+      <polygon points="-195,-220 -260,-120 -180,-90 -140,-140" fill="#1e293b" />
+      <polygon points="-260,-120 -240,-10 -170,-20 -180,-90" fill="#0f172a" />
+      <polygon points="-240,-10 -275,120 -180,90 -170,-20" fill="url(#dark-facet-l)" />
+      <polygon points="-275,120 -210,260 -130,190 -180,90" fill="#1e293b" />
+
+      <!-- Right Crest Wing Plates (Symmetric) -->
+      <polygon points="195,-220 260,-120 180,-90 140,-140" fill="#334155" />
+      <polygon points="260,-120 240,-10 170,-20 180,-90" fill="#1e293b" />
+      <polygon points="240,-10 275,120 180,90 170,-20" fill="url(#dark-facet-r)" />
+      <polygon points="275,120 210,260 130,190 180,90" fill="#0f172a" />
+
+      <!-- Symmetrical Lower Chest & Body Armor -->
+      <polygon points="-130,190 -210,260 -120,310 0,270" fill="#0f172a" />
+      <polygon points="130,190 210,260 120,310 0,270" fill="#1e293b" />
+      <polygon points="0,270 120,310 0,335 -120,310" fill="#334155" />
+
+      <!-- Central Shield Breastplate -->
+      <polygon points="0,-50 110,30 80,170 0,230" fill="url(#dark-facet-r)" />
+      <polygon points="0,-50 -110,30 -80,170 0,230" fill="url(#dark-facet-l)" />
+      <polygon points="0,230 80,170 0,270 -80,170" fill="#0b0f19" stroke="#00f5ff" stroke-width="2" opacity="0.8" />
+
+      <!-- DUAL REAL-TIME OPTICAL APERTURE LENSES (The WebRTCLens Signature) -->
+      <!-- Left Optical Lens Eye Assembly -->
+      <!-- Outer Hex Socket -->
+      <polygon points="-140,-140 -65,-110 -60,-20 -130,10 -170,-20 -180,-90" fill="#0b0f19" stroke="#00f5ff" stroke-width="3" />
+      <!-- Sclerotic Ring Chamber -->
+      <circle cx="-115" cy="-55" r="46" fill="#0f172a" stroke="#1e293b" stroke-width="6" />
+      <!-- Concentric Aperture Focus Ring -->
+      <circle cx="-115" cy="-55" r="36" fill="none" stroke="url(#cyan-glow)" stroke-width="5" stroke-dasharray="8 4" />
+      <!-- Inner Pupil Sensor with Electric Cyan Gradient -->
+      <circle cx="-115" cy="-55" r="22" fill="url(#cyan-glow)" />
+      <circle cx="-115" cy="-55" r="10" fill="#ffffff" />
+
+      <!-- Right Optical Lens Eye Assembly (Symmetric) -->
+      <!-- Outer Hex Socket -->
+      <polygon points="140,-140 65,-110 60,-20 130,10 170,-20 180,-90" fill="#0b0f19" stroke="#00f5ff" stroke-width="3" />
+      <!-- Sclerotic Ring Chamber -->
+      <circle cx="115" cy="-55" r="46" fill="#0f172a" stroke="#1e293b" stroke-width="6" />
+      <!-- Concentric Aperture Focus Ring -->
+      <circle cx="115" cy="-55" r="36" fill="none" stroke="url(#cyan-glow)" stroke-width="5" stroke-dasharray="8 4" />
+      <!-- Inner Pupil Sensor with Electric Cyan Gradient -->
+      <circle cx="115" cy="-55" r="22" fill="url(#cyan-glow)" />
+      <circle cx="115" cy="-55" r="10" fill="#ffffff" />
+
+      <!-- Geometric Titanium Beak (Aperture Prism) -->
+      <polygon points="0,-40 -32,25 0,75 32,25" fill="#1e293b" stroke="#00f5ff" stroke-width="2" />
+      <polygon points="0,-40 0,75 32,25" fill="#334155" />
+      <polygon points="0,-40 -32,25 0,75" fill="#0f172a" />
+      <polygon points="0,75 -20,115 0,135 20,115" fill="url(#cyan-core)" />
+
+      <!-- Real-Time Signaling Ray Flares (Micro-Interactions) -->
+      <line x1="-115" y1="-55" x2="-230" y2="-120" stroke="#00f5ff" stroke-width="2.5" opacity="0.6" stroke-dasharray="6 4" />
+      <line x1="115" y1="-55" x2="230" y2="-120" stroke="#00f5ff" stroke-width="2.5" opacity="0.6" stroke-dasharray="6 4" />
+      <circle cx="-230" cy="-120" r="4" fill="#00f5ff" />
+      <circle cx="230" cy="-120" r="4" fill="#00f5ff" />
+
+    </g>
+  </g>
 </svg>

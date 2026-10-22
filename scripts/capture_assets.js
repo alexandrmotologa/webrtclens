@@ -21,12 +21,12 @@ async function run() {
       '--use-fake-ui-for-media-stream',
       '--use-fake-device-for-media-stream',
       '--autoplay-policy=no-user-gesture-required',
-      '--window-size=1280,820',
+      '--window-size=1366,860',
     ],
   });
 
   const page = await browser.newPage();
-  await page.setViewport({ width: 1280, height: 800 });
+  await page.setViewport({ width: 1366, height: 820 });
 
   let frameCount = 0;
   const captureFrame = async () => {
@@ -37,7 +37,7 @@ async function run() {
 
   console.log('Navigating to http://127.0.0.1:3000...');
   await page.goto('http://127.0.0.1:3000', { waitUntil: 'networkidle0' });
-  await new Promise((r) => setTimeout(r, 1000));
+  await new Promise((r) => setTimeout(r, 1200));
 
   // --- 1. SDP Diff Studio ---
   console.log('Capturing Screenshot 1: SDP Diff Studio...');
@@ -51,32 +51,45 @@ async function run() {
     const b = btns.find((x) => x.textContent?.includes('STUN / TURN Probe'));
     if (b) b.click();
   });
-  await new Promise((r) => setTimeout(r, 500));
+  await new Promise((r) => setTimeout(r, 600));
   for (let i = 0; i < 2; i++) await captureFrame();
 
-  console.log('Executing STUN Probe...');
+  console.log('Executing live STUN Probe...');
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const b = btns.find((x) => x.textContent?.trim() === 'STUN Probe');
     if (b) b.click();
   });
-  await new Promise((r) => setTimeout(r, 1800));
+  await new Promise((r) => setTimeout(r, 2200));
 
-  console.log('Capturing Screenshot 2: STUN / TURN Probe...');
+  console.log('Capturing Screenshot 2: STUN / TURN Live Prober...');
   await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-2.png') });
   for (let i = 0; i < 5; i++) await captureFrame();
 
-  // --- 3. ICE Waterfall & Topology ---
+  // --- 3. RFC 5780 NAT Compatibility Matrix ---
+  console.log('Switching to RFC 5780 NAT Matrix tab...');
+  await page.evaluate(() => {
+    const btns = Array.from(document.querySelectorAll('button'));
+    const b = btns.find((x) => x.textContent?.includes('RFC 5780 NAT Matrix'));
+    if (b) b.click();
+  });
+  await new Promise((r) => setTimeout(r, 800));
+
+  console.log('Capturing Screenshot 3: RFC 5780 NAT Compatibility Matrix...');
+  await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-3.png') });
+  for (let i = 0; i < 4; i++) await captureFrame();
+
+  // --- 4. ICE Waterfall & Topology ---
   console.log('Switching to ICE Waterfall & Topology...');
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const b = btns.find((x) => x.textContent?.includes('ICE Waterfall'));
     if (b) b.click();
   });
-  await new Promise((r) => setTimeout(r, 500));
+  await new Promise((r) => setTimeout(r, 600));
   for (let i = 0; i < 2; i++) await captureFrame();
 
-  console.log('Gathering Local ICE Candidates...');
+  console.log('Gathering Local ICE Candidates in browser...');
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const b = btns.find((x) => x.textContent?.includes('Gather Local Candidates'));
@@ -84,18 +97,18 @@ async function run() {
   });
   await new Promise((r) => setTimeout(r, 2200));
 
-  console.log('Capturing Screenshot 3: ICE Waterfall & Topology...');
-  await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-3.png') });
+  console.log('Capturing Screenshot 4: ICE Waterfall & Topology...');
+  await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-4.png') });
   for (let i = 0; i < 5; i++) await captureFrame();
 
-  // --- 4. Media Loopback & Chaos ---
+  // --- 5. Media Loopback & Chaos ---
   console.log('Switching to Media Loopback & Chaos...');
   await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button'));
     const b = btns.find((x) => x.textContent?.includes('Media Loopback'));
     if (b) b.click();
   });
-  await new Promise((r) => setTimeout(r, 500));
+  await new Promise((r) => setTimeout(r, 600));
   for (let i = 0; i < 2; i++) await captureFrame();
 
   console.log('Starting Media Loopback...');
@@ -109,38 +122,59 @@ async function run() {
   await page.evaluate(() => {
     const inputs = document.querySelectorAll('input[type="range"]');
     if (inputs[0]) {
-      // Packet loss
       inputs[0].value = '15';
       inputs[0].dispatchEvent(new Event('input', { bubbles: true }));
       inputs[0].dispatchEvent(new Event('change', { bubbles: true }));
     }
     if (inputs[1]) {
-      // Latency
       inputs[1].value = '150';
       inputs[1].dispatchEvent(new Event('input', { bubbles: true }));
       inputs[1].dispatchEvent(new Event('change', { bubbles: true }));
     }
   });
 
-  // Wait 3.5s for video playback and stats to stream
   for (let k = 0; k < 6; k++) {
     await new Promise((r) => setTimeout(r, 600));
     await captureFrame();
   }
 
-  console.log('Capturing Screenshot 4: Media Loopback & Chaos...');
-  await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-4.png') });
+  console.log('Capturing Screenshot 5: Media Loopback & Chaos...');
+  await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-5.png') });
   for (let i = 0; i < 4; i++) await captureFrame();
 
+  // --- 6. WebRTC RFC Health & Compliance Auditor ---
+  console.log('Switching to Compliance Audit...');
+  await page.evaluate(() => {
+    const btns = Array.from(document.querySelectorAll('button'));
+    const b = btns.find((x) => x.textContent?.includes('Compliance Audit'));
+    if (b) b.click();
+  });
+  await new Promise((r) => setTimeout(r, 1200));
+
+  console.log('Capturing Screenshot 6: Compliance Audit...');
+  await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-6.png') });
+  for (let i = 0; i < 5; i++) await captureFrame();
+
+  // --- 7. Mobile Viewport (iPhone 14/15 - 390x844) ---
+  console.log('Capturing Mobile Responsive View (390x844)...');
+  await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+  await page.evaluate(() => {
+    const btns = Array.from(document.querySelectorAll('button'));
+    const b = btns.find((x) => x.textContent?.includes('SDP Diff'));
+    if (b) b.click();
+  });
+  await new Promise((r) => setTimeout(r, 800));
+  await page.screenshot({ path: path.join(OUT_DIR, 'webrtclens-mobile.png') });
+
   await browser.close();
-  console.log('All 4 high-resolution screenshots captured successfully!');
+  console.log('All real UI screenshots captured successfully!');
 
   // Generate Animated Demo GIF using FFmpeg
   console.log('Generating docs/images/webrtclens_demo.gif via FFmpeg...');
   const gifPath = path.join(OUT_DIR, 'webrtclens_demo.gif');
   const ffmpegCmd = `ffmpeg -y -framerate 4 -i "${path.join(FRAMES_DIR, 'frame_%04d.png')}" -vf "fps=4,scale=960:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=128[p];[s1][p]paletteuse=dither=bayer" "${gifPath}"`;
   execSync(ffmpegCmd, { stdio: 'inherit' });
-  console.log('Generated animated demo GIF at:', gifPath);
+  console.log('✓ Generated animated demo GIF at:', gifPath);
 
   // Clean up temporary frame files
   const frameFiles = fs.readdirSync(FRAMES_DIR);
@@ -148,7 +182,7 @@ async function run() {
     fs.unlinkSync(path.join(FRAMES_DIR, f));
   }
   fs.rmdirSync(FRAMES_DIR);
-  console.log('Cleaned up temporary frames.');
+  console.log('✓ Cleaned up temporary frames.');
 }
 
 run().catch((err) => {
