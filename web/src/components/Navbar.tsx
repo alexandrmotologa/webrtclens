@@ -1,7 +1,7 @@
 import React from 'react';
-import { Radio, GitCompare, Network, Activity, BookOpen, ExternalLink, Cpu } from 'lucide-react';
+import { Radio, GitCompare, Network, Activity, BookOpen, ExternalLink, Cpu, ShieldCheck } from 'lucide-react';
 
-export type ActiveTab = 'sdp' | 'stun_turn' | 'ice' | 'loopback' | 'rfc';
+export type ActiveTab = 'sdp' | 'stun_turn' | 'ice' | 'loopback' | 'audit' | 'rfc';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -15,6 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, serverO
     { id: 'stun_turn', label: 'STUN / TURN Probe', icon: Radio },
     { id: 'ice', label: 'ICE Waterfall & Topology', icon: Network },
     { id: 'loopback', label: 'Media Loopback & Chaos', icon: Activity },
+    { id: 'audit', label: 'Compliance Audit', icon: ShieldCheck },
     { id: 'rfc', label: 'RFC Dictionary', icon: BookOpen },
   ] as const;
 

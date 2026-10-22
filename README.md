@@ -37,7 +37,12 @@ WebRTCLens is a local developer studio and command-line inspector for real-time 
 ## Key Features
 
 - **Side-by-Side SDP Diff Studio**: Visual line-by-line and semantic comparison with color-coded codec matching tables, payload type tracking, and DTLS role verification (`actpass` vs `active`/`passive`).
+- **Interactive SDP Munger**: Strip unwanted codecs, prefer specific codecs on m-lines, enforce bandwidth limits (`b=AS`/`b=TIAS`), modify DTLS setup roles, and enable Opus stereo parameters.
 - **Binary STUN/TURN Client**: Native encoder and decoder for RFC 5389 and RFC 8656 packets with HMAC-SHA1 message integrity, CRC-32 fingerprints, and 401 challenge processing.
+- **RFC 5780 NAT Compatibility Matrix**: Interactive 16-permutation NAT matrix classifying direct peer-to-peer viability, hole-punching difficulty, and mandatory relay requirements.
+- **DataChannel Throughput & Latency Benchmarker**: Measures sustained binary throughput (Mbps), SCTP backpressure, round-trip ping latency, and RFC 3550 jitter.
+- **chrome://webrtc-internals Importer**: Ingests browser JSON and text diagnostics to extract session descriptions and ICE candidate exchanges.
+- **RFC Health & Compliance Auditor**: Automated verification and grading against IETF specifications (RFC 8866, RFC 8841, RFC 8842, RFC 8843, RFC 5245).
 - **ICE Priority Matrix**: Calculates pair priorities using RFC 5245 formulas and detects potential NAT traversal failures before deployment.
 - **Network Chaos Controls**: Simulates packet loss (1% to 50%), artificial latency (0ms to 800ms), and jitter buffers directly on WebRTC media streams while collecting real-time `RTCStatsReport` metrics.
 - **Unified Interface**: Use WebRTCLens as an interactive React 19 web app, a headless Fastify REST API, or a standalone command-line tool.
@@ -79,6 +84,12 @@ npx webrtclens probe turn:turn.example.com:5349 --user webrtc --pass secret --tr
 # Run 5 consecutive latency probes
 npx webrtclens probe stun:stun1.l.google.com:19302 --count 5
 
+# Generate executive compliance audit report in Markdown format
+npx webrtclens audit offer.sdp answer.sdp
+
+# Generate structured JSON audit report for CI pipelines
+npx webrtclens audit offer.sdp answer.sdp --format json
+
 # Launch the interactive Web Studio and API server
 npx webrtclens serve --port 3000
 ```
@@ -99,6 +110,12 @@ When running `webrtclens serve`, the following endpoints are available:
 | `POST` | `/api/probe/turn` | Execute RFC 8656 TURN allocation probe |
 | `POST` | `/api/probe/benchmark` | Run multi-iteration latency and jitter benchmark |
 | `POST` | `/api/ice/analyze` | Evaluate candidate pairs and calculate RFC 5245 priorities |
+| `POST` | `/api/sdp/munge` | Transform SDP with codec stripping, preference, or bitrate limits |
+| `POST` | `/api/sdp/import-internals` | Parse and extract session descriptions from webrtc-internals dumps |
+| `GET` | `/api/nat/matrix` | Full 16-permutation RFC 5780 NAT compatibility matrix |
+| `POST` | `/api/nat/evaluate` | Evaluate peer-to-peer viability between two NAT configurations |
+| `POST` | `/api/audit/markdown` | Generate Markdown compliance audit report |
+| `POST` | `/api/audit/json` | Generate structured JSON compliance audit report |
 
 ---
 

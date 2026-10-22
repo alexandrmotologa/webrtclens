@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { GitCompare, CheckCircle2, AlertTriangle, XCircle, ArrowRight, Layers, ShieldCheck, Copy, Check, FileText } from 'lucide-react';
+import { GitCompare, CheckCircle2, AlertTriangle, XCircle, ArrowRight, Layers, ShieldCheck, Copy, Check, FileText, Wand2, UploadCloud, Download } from 'lucide-react';
+import { SdpMungerModal } from './SdpMungerModal.js';
+import { InternalsImportModal } from './InternalsImportModal.js';
 
 interface CodecMatch {
   name: string;
@@ -66,6 +68,9 @@ export const SdpDiffStudio: React.FC = () => {
   const [diffResult, setDiffResult] = useState<SdpDiffResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [mungerTarget, setMungerTarget] = useState<'Offer' | 'Answer' | null>(null);
+  const [internalsModalOpen, setInternalsModalOpen] = useState<boolean>(false);
+  const [auditLoading, setAuditLoading] = useState<boolean>(false);
 
   // Load samples on mount
   useEffect(() => {
@@ -130,6 +135,46 @@ export const SdpDiffStudio: React.FC = () => {
     setTimeout(() => setCopiedField(null), 1500);
   };
 
+  const handleApplyMunged = (mungedSdp: string) => {
+    if (mungerTarget === 'Offer') {
+      setOfferText(mungedSdp);
+    } else if (mungerTarget === 'Answer') {
+      setAnswerText(mungedSdp);
+    }
+  };
+
+  const handleImportInternals = (offer: string, answer: string) => {
+    setOfferText(offer);
+    setAnswerText(answer);
+  };
+
+  const handleDownloadAudit = async () => {
+    setAuditLoading(true);
+    try {
+      const res = await fetch('/api/audit/markdown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          score: diffResult?.summary.negotiable ? 94 : 45,
+          grade: diffResult?.summary.negotiable ? 'A' : 'F',
+          diffResult,
+        }),
+      });
+      const data = await res.json();
+      const blob = new Blob([data.markdown || ''], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `webrtc-audit-${Date.now()}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setAuditLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Top Control Bar */}
@@ -144,14 +189,14 @@ export const SdpDiffStudio: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
           {samples.length > 0 && (
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <span className="text-xs text-slate-400 whitespace-nowrap">Preset:</span>
               <select
                 value={selectedSampleId}
                 onChange={(e) => handleSelectSample(e.target.value)}
-                className="bg-slate-950 border border-slate-700 text-xs rounded-lg px-3 py-1.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="bg-slate-950 border border-slate-700 text-xs rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-cyan-500"
               >
                 {samples.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -161,6 +206,23 @@ export const SdpDiffStudio: React.FC = () => {
               </select>
             </div>
           )}
+
+          <button
+            onClick={() => setInternalsModalOpen(true)}
+            className="px-3 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm"
+          >
+            <UploadCloud className="w-3.5 h-3.5 text-purple-400" />
+            <span>Import Dump</span>
+          </button>
+
+          <button
+            onClick={handleDownloadAudit}
+            disabled={auditLoading}
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm disabled:opacity-50"
+          >
+            <Download className="w-3.5 h-3.5 text-slate-400" />
+            <span>{auditLoading ? 'Generating...' : 'Audit Report'}</span>
+          </button>
 
           <button
             onClick={handleRunDiff}
@@ -184,13 +246,22 @@ export const SdpDiffStudio: React.FC = () => {
                 {offerText.split('\n').filter(Boolean).length} lines
               </span>
             </div>
-            <button
-              onClick={() => copyToClipboard(offerText, 'offer')}
-              className="text-slate-400 hover:text-slate-200 transition flex items-center gap-1 text-[11px]"
-            >
-              {copiedField === 'offer' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              {copiedField === 'offer' ? 'Copied' : 'Copy'}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setMungerTarget('Offer')}
+                className="text-slate-400 hover:text-cyan-400 transition flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-slate-800/80 hover:bg-slate-800"
+              >
+                <Wand2 className="w-3 h-3 text-cyan-400" />
+                <span>Munge Offer</span>
+              </button>
+              <button
+                onClick={() => copyToClipboard(offerText, 'offer')}
+                className="text-slate-400 hover:text-slate-200 transition flex items-center gap-1 text-[11px]"
+              >
+                {copiedField === 'offer' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedField === 'offer' ? 'Copied' : 'Copy'}
+              </button>
+            </div>
           </div>
           <textarea
             value={offerText}
@@ -210,13 +281,22 @@ export const SdpDiffStudio: React.FC = () => {
                 {answerText.split('\n').filter(Boolean).length} lines
               </span>
             </div>
-            <button
-              onClick={() => copyToClipboard(answerText, 'answer')}
-              className="text-slate-400 hover:text-slate-200 transition flex items-center gap-1 text-[11px]"
-            >
-              {copiedField === 'answer' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              {copiedField === 'answer' ? 'Copied' : 'Copy'}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setMungerTarget('Answer')}
+                className="text-slate-400 hover:text-emerald-400 transition flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-slate-800/80 hover:bg-slate-800"
+              >
+                <Wand2 className="w-3 h-3 text-emerald-400" />
+                <span>Munge Answer</span>
+              </button>
+              <button
+                onClick={() => copyToClipboard(answerText, 'answer')}
+                className="text-slate-400 hover:text-slate-200 transition flex items-center gap-1 text-[11px]"
+              >
+                {copiedField === 'answer' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedField === 'answer' ? 'Copied' : 'Copy'}
+              </button>
+            </div>
           </div>
           <textarea
             value={answerText}
@@ -427,6 +507,24 @@ export const SdpDiffStudio: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* SDP Munger Modal */}
+      {mungerTarget && (
+        <SdpMungerModal
+          isOpen={mungerTarget !== null}
+          onClose={() => setMungerTarget(null)}
+          targetTitle={mungerTarget}
+          initialSdp={mungerTarget === 'Offer' ? offerText : answerText}
+          onApply={handleApplyMunged}
+        />
+      )}
+
+      {/* Internals Dump Importer Modal */}
+      <InternalsImportModal
+        isOpen={internalsModalOpen}
+        onClose={() => setInternalsModalOpen(false)}
+        onImport={handleImportInternals}
+      />
     </div>
   );
 };

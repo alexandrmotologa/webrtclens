@@ -4,6 +4,7 @@ import { SdpDiffStudio } from './components/SdpDiffStudio.js';
 import { StunTurnProbeHub } from './components/StunTurnProbeHub.js';
 import { IceWaterfallView } from './components/IceWaterfallView.js';
 import { MediaLoopbackView } from './components/MediaLoopbackView.js';
+import { ComplianceAuditView } from './components/ComplianceAuditView.js';
 import { RfcReferenceView } from './components/RfcReferenceView.js';
 
 export const App: React.FC = () => {
@@ -35,6 +36,7 @@ export const App: React.FC = () => {
         {activeTab === 'stun_turn' && <StunTurnProbeHub />}
         {activeTab === 'ice' && <IceWaterfallView />}
         {activeTab === 'loopback' && <MediaLoopbackView />}
+        {activeTab === 'audit' && <ComplianceAuditView />}
         {activeTab === 'rfc' && <RfcReferenceView />}
       </main>
 

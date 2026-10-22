@@ -9,6 +9,8 @@ import pc from 'picocolors';
 
 import { parseSdp } from './sdp/parser.js';
 import { diffSdp } from './sdp/diff.js';
+import { mungeSdp } from './sdp/munger.js';
+import { generateMarkdownAuditReport, generateJsonAuditReport } from './server/audit.js';
 import { probeStun, parseStunUrl } from './stun_turn/stun_client.js';
 import { probeTurn, parseTurnUrl } from './stun_turn/turn_client.js';
 import { runBenchmark } from './stun_turn/benchmark.js';
@@ -96,6 +98,69 @@ program
       console.log('');
     } catch (err: any) {
       console.error(pc.red(`SDP Diff failed: ${err.message}`));
+      process.exit(1);
+    }
+  });
+
+// Command: audit
+program
+  .command('audit <offerPath> <answerPath>')
+  .description('Generate executive Markdown / JSON audit report for CI/CD pipelines and issue trackers')
+  .option('-o, --output <outputPath>', 'Save Markdown audit report to file')
+  .option('--json', 'Output full report bundle as JSON')
+  .option('--fail-on-warnings', 'Exit with status 1 if any warnings exist (strict CI gate)')
+  .action((offerPath, answerPath, options) => {
+    try {
+      const fullOfferPath = path.resolve(process.cwd(), offerPath);
+      const fullAnswerPath = path.resolve(process.cwd(), answerPath);
+
+      if (!fs.existsSync(fullOfferPath) || !fs.existsSync(fullAnswerPath)) {
+        console.error(pc.red('Error: Offer or Answer file not found'));
+        process.exit(1);
+      }
+
+      const offerText = fs.readFileSync(fullOfferPath, 'utf8');
+      const answerText = fs.readFileSync(fullAnswerPath, 'utf8');
+
+      const offerAst = parseSdp(offerText);
+      const answerAst = parseSdp(answerText);
+      const diff = diffSdp(offerAst, answerAst);
+
+      const reportData = {
+        sdpDiff: diff,
+        timestamp: new Date().toISOString(),
+      };
+
+      if (options.json) {
+        const jsonOut = generateJsonAuditReport(reportData);
+        if (options.output) {
+          fs.writeFileSync(path.resolve(process.cwd(), options.output), jsonOut, 'utf8');
+          console.log(pc.green(`✓ Audit JSON written to: ${options.output}`));
+        } else {
+          console.log(jsonOut);
+        }
+      } else {
+        const mdOut = generateMarkdownAuditReport(reportData);
+        if (options.output) {
+          fs.writeFileSync(path.resolve(process.cwd(), options.output), mdOut, 'utf8');
+          console.log(pc.green(`✓ Executive Markdown audit written to: ${options.output}`));
+        } else {
+          console.log(mdOut);
+        }
+      }
+
+      // CI/CD gate checks
+      if (!diff.summary.negotiable) {
+        console.error(pc.red('\n[CI FAILURE] SDP negotiation failed. Incompatible codecs or DTLS role collision.'));
+        process.exit(1);
+      }
+
+      if (options.failOnWarnings && diff.summary.warningsCount > 0) {
+        console.error(pc.red(`\n[CI FAILURE] ${diff.summary.warningsCount} SDP warnings detected under --fail-on-warnings gate.`));
+        process.exit(1);
+      }
+    } catch (err: any) {
+      console.error(pc.red(`Audit error: ${err.message}`));
       process.exit(1);
     }
   });

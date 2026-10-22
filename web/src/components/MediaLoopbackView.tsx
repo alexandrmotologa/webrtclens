@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Activity, Play, Square, Sliders, Volume2, VolumeX, Video, Zap, AlertCircle } from 'lucide-react';
+import { Activity, Play, Square, Sliders, Volume2, VolumeX, Video, Zap, AlertCircle, Gauge } from 'lucide-react';
 import { drawTestPattern } from '../../../src/loopback/synthetic_media.js';
+import { DataChannelBenchmarker } from './DataChannelBenchmarker.js';
 
 interface StatsHistoryPoint {
   time: number;
@@ -10,6 +11,7 @@ interface StatsHistoryPoint {
 }
 
 export const MediaLoopbackView: React.FC = () => {
+  const [subView, setSubView] = useState<'media' | 'datachannel'>('media');
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(false);
   const [lossPercent, setLossPercent] = useState<number>(0);
@@ -218,27 +220,56 @@ export const MediaLoopbackView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          {!isRunning ? (
+          <div className="flex items-center p-1 bg-slate-950 rounded-lg border border-slate-800">
             <button
-              onClick={startLoopback}
-              className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition shadow-sm flex items-center gap-2"
+              onClick={() => setSubView('media')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+                subView === 'media'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
             >
-              <Play className="w-3.5 h-3.5 fill-current" />
-              Start Media Loopback
+              Media Stream &amp; Chaos
             </button>
-          ) : (
             <button
-              onClick={stopLoopback}
-              className="px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-semibold text-xs transition shadow-sm flex items-center gap-2"
+              onClick={() => setSubView('datachannel')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+                subView === 'datachannel'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
             >
-              <Square className="w-3.5 h-3.5 fill-current" />
-              Stop Loopback
+              DataChannel Benchmarker
             </button>
+          </div>
+
+          {subView === 'media' && (
+            !isRunning ? (
+              <button
+                onClick={startLoopback}
+                className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition shadow-sm flex items-center gap-2"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+                Start Media Loopback
+              </button>
+            ) : (
+              <button
+                onClick={stopLoopback}
+                className="px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-semibold text-xs transition shadow-sm flex items-center gap-2"
+              >
+                <Square className="w-3.5 h-3.5 fill-current" />
+                Stop Loopback
+              </button>
+            )
           )}
         </div>
       </div>
 
-      {/* Media Displays Grid */}
+      {subView === 'datachannel' ? (
+        <DataChannelBenchmarker />
+      ) : (
+        <>
+          {/* Media Displays Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Offerer Video Source (Canvas) */}
         <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800 space-y-3">
@@ -436,6 +467,8 @@ export const MediaLoopbackView: React.FC = () => {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 };

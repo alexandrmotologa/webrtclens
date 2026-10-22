@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Radio, CheckCircle2, XCircle, ArrowUpRight, Zap, RefreshCw, Terminal, Globe, Shield } from 'lucide-react';
+import { Radio, CheckCircle2, XCircle, ArrowUpRight, Zap, RefreshCw, Terminal, Globe, Shield, Network } from 'lucide-react';
+import { NatMatrixView } from './NatMatrixView.js';
 
 interface StunProbeResult {
   host: string;
@@ -46,6 +47,7 @@ interface BenchmarkReport {
 }
 
 export const StunTurnProbeHub: React.FC = () => {
+  const [hubView, setHubView] = useState<'prober' | 'nat_matrix'>('prober');
   const [serverUrl, setServerUrl] = useState<string>('stun:stun.l.google.com:19302');
   const [transport, setTransport] = useState<'udp' | 'tcp' | 'tls'>('udp');
   const [username, setUsername] = useState<string>('');
@@ -174,22 +176,53 @@ export const StunTurnProbeHub: React.FC = () => {
           </p>
         </div>
 
-        {/* Quick Presets */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-slate-400">Presets:</span>
-          {presets.map((p) => (
+        {/* Toggle & Quick Presets */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center p-1 bg-slate-950 rounded-lg border border-slate-800">
             <button
-              key={p.label}
-              onClick={() => handleApplyPreset(p)}
-              className="px-2.5 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[11px] font-medium text-slate-200 transition"
+              onClick={() => setHubView('prober')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+                hubView === 'prober'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
             >
-              {p.label}
+              Protocol Prober
             </button>
-          ))}
+            <button
+              onClick={() => setHubView('nat_matrix')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+                hubView === 'nat_matrix'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              RFC 5780 NAT Matrix
+            </button>
+          </div>
+
+          {hubView === 'prober' && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-xs text-slate-400">Presets:</span>
+              {presets.map((p) => (
+                <button
+                  key={p.label}
+                  onClick={() => handleApplyPreset(p)}
+                  className="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-700 text-[11px] font-medium text-slate-200 transition"
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Input Configuration Card */}
+      {hubView === 'nat_matrix' ? (
+        <NatMatrixView />
+      ) : (
+        <>
+          {/* Input Configuration Card */}
       <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 space-y-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
           {/* Server URL Input */}
@@ -478,6 +511,8 @@ export const StunTurnProbeHub: React.FC = () => {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 };

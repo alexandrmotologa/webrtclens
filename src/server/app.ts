@@ -11,6 +11,10 @@ import { fileURLToPath } from 'node:url';
 
 import { parseSdp } from '../sdp/parser.js';
 import { diffSdp } from '../sdp/diff.js';
+import { mungeSdp, type SdpMungeOptions } from '../sdp/munger.js';
+import { importWebRtcDump } from '../sdp/importer.js';
+import { generateMarkdownAuditReport, generateJsonAuditReport } from './audit.js';
+import { NAT_COMPATIBILITY_MATRIX, evaluateNatPair, type NatMappingType } from '../stun_turn/nat_matrix.js';
 import { SDP_SAMPLES } from '../sdp/samples.js';
 import { probeStun, parseStunUrl } from '../stun_turn/stun_client.js';
 import { probeTurn, parseTurnUrl } from '../stun_turn/turn_client.js';
@@ -91,6 +95,59 @@ export async function buildServer(options: BuildServerOptions = {}): Promise<Fas
     } catch (err: any) {
       return reply.code(400).send({ error: err.message });
     }
+  });
+
+  app.post('/api/sdp/munge', async (request, reply) => {
+    const body = request.body as { sdp?: string; options?: SdpMungeOptions };
+    if (!body?.sdp) {
+      return reply.code(400).send({ error: 'Missing "sdp" in request body' });
+    }
+
+    try {
+      const munged = mungeSdp(body.sdp, body.options || {});
+      const ast = parseSdp(munged);
+      return {
+        sdp: munged,
+        ast,
+      };
+    } catch (err: any) {
+      return reply.code(400).send({ error: err.message });
+    }
+  });
+
+  app.post('/api/sdp/import-internals', async (request, reply) => {
+    const body = request.body as { text?: string };
+    if (!body?.text) {
+      return reply.code(400).send({ error: 'Missing "text" in request body' });
+    }
+    const res = importWebRtcDump(body.text);
+    return res;
+  });
+
+  // NAT Compatibility Matrix Endpoints (RFC 5780)
+  app.get('/api/nat/matrix', async () => {
+    return NAT_COMPATIBILITY_MATRIX;
+  });
+
+  app.post('/api/nat/evaluate', async (request, reply) => {
+    const body = request.body as { peerA?: NatMappingType; peerB?: NatMappingType };
+    if (!body?.peerA || !body?.peerB) {
+      return reply.code(400).send({ error: 'Both peerA and peerB types required' });
+    }
+    return evaluateNatPair(body.peerA, body.peerB);
+  });
+
+  // Audit Report Export Endpoints
+  app.post('/api/audit/markdown', async (request, reply) => {
+    const body = request.body as any;
+    const md = generateMarkdownAuditReport(body || {});
+    return { markdown: md };
+  });
+
+  app.post('/api/audit/json', async (request, reply) => {
+    const body = request.body as any;
+    const jsonStr = generateJsonAuditReport(body || {});
+    return JSON.parse(jsonStr);
   });
 
   // STUN & TURN Probe Endpoints
