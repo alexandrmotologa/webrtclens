@@ -178,25 +178,25 @@ export const SdpDiffStudio: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Control Bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-slate-900/60 border border-slate-800 shadow-xs">
         <div>
-          <h2 className="text-base font-semibold text-white flex items-center gap-2">
-            <GitCompare className="w-5 h-5 text-cyan-400" />
-            Session Description Protocol (SDP) Semantic Diff
+          <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2.5 whitespace-nowrap">
+            <GitCompare className="w-5 h-5 text-cyan-400 shrink-0" />
+            <span>Session Description Protocol (SDP) Semantic Diff</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
             Decodes and compares Offer vs Answer media descriptions, codec payload maps, and DTLS roles
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 w-full lg:w-auto shrink-0">
           {samples.length > 0 && (
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-2 shrink-0">
               <span className="text-xs text-slate-400 whitespace-nowrap">Preset:</span>
               <select
                 value={selectedSampleId}
                 onChange={(e) => handleSelectSample(e.target.value)}
-                className="bg-slate-950 border border-slate-700 text-xs rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="bg-slate-950 border border-slate-700 text-xs rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-cyan-500 shrink-0"
               >
                 {samples.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -209,28 +209,28 @@ export const SdpDiffStudio: React.FC = () => {
 
           <button
             onClick={() => setInternalsModalOpen(true)}
-            className="px-3 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm"
+            className="px-3 py-1.5 rounded-lg bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm shrink-0 whitespace-nowrap"
           >
-            <UploadCloud className="w-3.5 h-3.5 text-purple-400" />
+            <UploadCloud className="w-3.5 h-3.5 text-purple-400 shrink-0" />
             <span>Import Dump</span>
           </button>
 
           <button
             onClick={handleDownloadAudit}
             disabled={auditLoading}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm disabled:opacity-50"
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold transition flex items-center gap-1.5 shadow-sm disabled:opacity-50 shrink-0 whitespace-nowrap"
           >
-            <Download className="w-3.5 h-3.5 text-slate-400" />
+            <Download className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span>{auditLoading ? 'Generating...' : 'Audit Report'}</span>
           </button>
 
           <button
             onClick={handleRunDiff}
             disabled={loading}
-            className="px-4 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs transition shadow-sm disabled:opacity-50 flex items-center gap-1.5"
+            className="px-4 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-sm disabled:opacity-50 flex items-center gap-1.5 shrink-0 whitespace-nowrap"
           >
-            <GitCompare className="w-3.5 h-3.5" />
-            {loading ? 'Analyzing...' : 'Diff SDP'}
+            <GitCompare className="w-3.5 h-3.5 shrink-0" />
+            <span>{loading ? 'Analyzing...' : 'Diff SDP'}</span>
           </button>
         </div>
       </div>

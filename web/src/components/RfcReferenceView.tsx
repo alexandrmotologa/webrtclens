@@ -126,7 +126,7 @@ export const RfcReferenceView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
         <div>
           <h2 className="text-base font-semibold text-white flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-cyan-400" />
@@ -138,7 +138,7 @@ export const RfcReferenceView: React.FC = () => {
         </div>
 
         {/* Search Bar */}
-        <div className="relative w-full sm:w-64">
+        <div className="relative w-full lg:w-72 shrink-0">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
           <input
             type="text"
@@ -156,7 +156,7 @@ export const RfcReferenceView: React.FC = () => {
           <button
             key={cat.id}
             onClick={() => setSelectedCategory(cat.id)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap shrink-0 ${
               selectedCategory === cat.id
                 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
                 : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'

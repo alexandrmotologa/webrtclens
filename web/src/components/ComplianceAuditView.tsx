@@ -338,7 +338,7 @@ export const ComplianceAuditView: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto shrink-0">
           {samples.length > 0 && (
             <div className="flex items-center gap-2">
               <span className="text-xs text-slate-400 whitespace-nowrap">Audit Scenario:</span>
@@ -359,7 +359,7 @@ export const ComplianceAuditView: React.FC = () => {
           <button
             onClick={runDynamicAudit}
             disabled={loading}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-cyan-300 border border-slate-700 transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-cyan-300 border border-slate-700 transition flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             <span>Re-Audit</span>
@@ -367,7 +367,7 @@ export const ComplianceAuditView: React.FC = () => {
 
           <button
             onClick={copyReportMarkdown}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700 transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700 transition flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             {copied ? 'Copied MD' : 'Copy Report'}
@@ -375,7 +375,7 @@ export const ComplianceAuditView: React.FC = () => {
 
           <button
             onClick={downloadMarkdownReport}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700 transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 border border-slate-700 transition flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
             <Download className="w-3.5 h-3.5" />
             Download .md
@@ -383,7 +383,7 @@ export const ComplianceAuditView: React.FC = () => {
 
           <button
             onClick={downloadJsonReport}
-            className="px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5"
+            className="px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
             <Download className="w-3.5 h-3.5" />
             Export JSON
@@ -442,10 +442,10 @@ export const ComplianceAuditView: React.FC = () => {
       </div>
 
       {/* Category Filter Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-xs">
         <button
           onClick={() => setSelectedCategory('all')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap shrink-0 ${
             selectedCategory === 'all'
               ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
               : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
@@ -455,7 +455,7 @@ export const ComplianceAuditView: React.FC = () => {
         </button>
         <button
           onClick={() => setSelectedCategory('sdp')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap shrink-0 ${
             selectedCategory === 'sdp'
               ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
               : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
@@ -465,7 +465,7 @@ export const ComplianceAuditView: React.FC = () => {
         </button>
         <button
           onClick={() => setSelectedCategory('codec')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap shrink-0 ${
             selectedCategory === 'codec'
               ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
               : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
@@ -475,7 +475,7 @@ export const ComplianceAuditView: React.FC = () => {
         </button>
         <button
           onClick={() => setSelectedCategory('dtls')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap shrink-0 ${
             selectedCategory === 'dtls'
               ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
               : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
@@ -485,7 +485,7 @@ export const ComplianceAuditView: React.FC = () => {
         </button>
         <button
           onClick={() => setSelectedCategory('bundle')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap shrink-0 ${
             selectedCategory === 'bundle'
               ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
               : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'
@@ -495,7 +495,7 @@ export const ComplianceAuditView: React.FC = () => {
         </button>
         <button
           onClick={() => setSelectedCategory('ice')}
-          className={`px-3 py-1.5 rounded-lg font-medium transition ${
+          className={`px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap shrink-0 ${
             selectedCategory === 'ice'
               ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
               : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800'

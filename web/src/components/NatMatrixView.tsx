@@ -124,7 +124,7 @@ export const NatMatrixView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Header Card */}
-      <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <h2 className="text-base font-semibold text-white flex items-center gap-2">
             <Network className="w-5 h-5 text-cyan-400" />
@@ -135,8 +135,8 @@ export const NatMatrixView: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 whitespace-nowrap">
             RFC 5780 &bull; RFC 5389 &bull; RFC 8445
           </span>
         </div>

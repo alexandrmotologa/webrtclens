@@ -230,24 +230,24 @@ export const MediaLoopbackView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl bg-slate-900/60 border border-slate-800 shadow-xs">
         <div>
-          <h2 className="text-base font-semibold text-white flex items-center gap-2">
-            <Activity className="w-5 h-5 text-cyan-400" />
-            Synthetic Loopback &amp; Network Chaos Studio
+          <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2.5 whitespace-nowrap">
+            <Activity className="w-5 h-5 text-cyan-400 shrink-0" />
+            <span>Synthetic Loopback &amp; Network Chaos Studio</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
             Streams synthetic SMPTE test patterns and audio frequencies across dual local peer connections with live chaos injection
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center p-1 bg-slate-950 rounded-lg border border-slate-800">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full lg:w-auto shrink-0">
+          <div className="flex items-center p-1 bg-slate-950 rounded-xl border border-slate-800 shrink-0">
             <button
               onClick={() => setSubView('media')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-all ${
                 subView === 'media'
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-2xs'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -255,9 +255,9 @@ export const MediaLoopbackView: React.FC = () => {
             </button>
             <button
               onClick={() => setSubView('datachannel')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-all ${
                 subView === 'datachannel'
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-2xs'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -269,18 +269,18 @@ export const MediaLoopbackView: React.FC = () => {
             !isRunning ? (
               <button
                 onClick={startLoopback}
-                className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition shadow-sm flex items-center gap-2"
+                className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-sm flex items-center gap-2 shrink-0 whitespace-nowrap"
               >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                Start Media Loopback
+                <Play className="w-3.5 h-3.5 fill-current shrink-0" />
+                <span className="whitespace-nowrap">Start Media Loopback</span>
               </button>
             ) : (
               <button
                 onClick={stopLoopback}
-                className="px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-semibold text-xs transition shadow-sm flex items-center gap-2"
+                className="px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs transition shadow-sm flex items-center gap-2 shrink-0 whitespace-nowrap"
               >
-                <Square className="w-3.5 h-3.5 fill-current" />
-                Stop Loopback
+                <Square className="w-3.5 h-3.5 fill-current shrink-0" />
+                <span className="whitespace-nowrap">Stop Loopback</span>
               </button>
             )
           )}
@@ -402,15 +402,15 @@ export const MediaLoopbackView: React.FC = () => {
             </div>
 
             {/* Audio Toggle */}
-            <div className="pt-2 flex items-center justify-between border-t border-slate-800/80">
-              <div className="flex items-center gap-2">
-                {audioEnabled ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
-                <span className="text-xs text-slate-300">440 Hz Sine Tone Test</span>
+            <div className="pt-2 flex items-center justify-between border-t border-slate-800/80 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                {audioEnabled ? <Volume2 className="w-4 h-4 text-cyan-400 shrink-0" /> : <VolumeX className="w-4 h-4 text-slate-500 shrink-0" />}
+                <span className="text-xs text-slate-300 truncate">440 Hz Sine Tone Test</span>
               </div>
               <button
                 onClick={() => setAudioEnabled(!audioEnabled)}
-                className={`px-3 py-1 rounded text-xs font-semibold transition ${
-                  audioEnabled ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-all ${
+                  audioEnabled ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-slate-200'
                 }`}
               >
                 {audioEnabled ? 'Audio Muted' : 'Enable Audio'}
@@ -423,37 +423,37 @@ export const MediaLoopbackView: React.FC = () => {
         <div className="lg:col-span-7 p-4 rounded-xl bg-slate-900/50 border border-slate-800 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-400" />
-              Live Inbound RTCStatsReport Metrics
+              <Zap className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>Live Inbound RTCStatsReport Metrics</span>
             </span>
-            <span className="text-[10px] text-slate-500 font-mono">Polled every 1000ms</span>
+            <span className="text-[10px] text-slate-500 font-mono whitespace-nowrap">Polled every 1000ms</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800">
-              <span className="text-[10px] uppercase text-slate-500 font-semibold block">Inbound Bitrate</span>
-              <span className="text-lg font-mono font-bold text-cyan-300 mt-1 block">
+              <span className="text-[10px] uppercase text-slate-500 font-semibold block whitespace-nowrap">Inbound Bitrate</span>
+              <span className="text-lg font-mono font-bold text-cyan-300 mt-1 block whitespace-nowrap">
                 {bitrateKbps} kbps
               </span>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800">
-              <span className="text-[10px] uppercase text-slate-500 font-semibold block">Frame Rate</span>
-              <span className="text-lg font-mono font-bold text-emerald-400 mt-1 block">
+              <span className="text-[10px] uppercase text-slate-500 font-semibold block whitespace-nowrap">Frame Rate</span>
+              <span className="text-lg font-mono font-bold text-emerald-400 mt-1 block whitespace-nowrap">
                 {fps} FPS
               </span>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800">
-              <span className="text-[10px] uppercase text-slate-500 font-semibold block">Jitter</span>
-              <span className="text-lg font-mono font-bold text-purple-400 mt-1 block">
+              <span className="text-[10px] uppercase text-slate-500 font-semibold block whitespace-nowrap">Jitter</span>
+              <span className="text-lg font-mono font-bold text-purple-400 mt-1 block whitespace-nowrap">
                 {jitterTimeMs} ms
               </span>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800">
-              <span className="text-[10px] uppercase text-slate-500 font-semibold block">Lost Packets</span>
-              <span className="text-lg font-mono font-bold text-amber-400 mt-1 block">
+              <span className="text-[10px] uppercase text-slate-500 font-semibold block whitespace-nowrap">Lost Packets</span>
+              <span className="text-lg font-mono font-bold text-amber-400 mt-1 block whitespace-nowrap">
                 {packetsLost}
               </span>
             </div>

@@ -211,7 +211,7 @@ export const InternalsImportModal: React.FC<InternalsImportModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition"
+            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition whitespace-nowrap shrink-0"
           >
             Cancel
           </button>
@@ -220,7 +220,7 @@ export const InternalsImportModal: React.FC<InternalsImportModalProps> = ({
             type="button"
             onClick={handleApply}
             disabled={!parsedData?.offer || !parsedData?.answer}
-            className="px-5 py-2 rounded-lg bg-purple-500 hover:bg-purple-400 text-slate-950 text-xs font-bold transition flex items-center gap-2 disabled:opacity-40 shadow-lg shadow-purple-500/20"
+            className="px-5 py-2 rounded-lg bg-purple-500 hover:bg-purple-400 text-slate-950 text-xs font-bold transition flex items-center gap-2 disabled:opacity-40 shadow-lg shadow-purple-500/20 whitespace-nowrap shrink-0"
           >
             <span>Load into Diff Studio</span>
             <ArrowRight className="w-4 h-4" />

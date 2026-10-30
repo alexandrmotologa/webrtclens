@@ -307,7 +307,7 @@ export const DataChannelBenchmarker: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Control Banner */}
-      <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <h2 className="text-base font-semibold text-white flex items-center gap-2">
             <Gauge className="w-5 h-5 text-cyan-400" />
@@ -318,11 +318,11 @@ export const DataChannelBenchmarker: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           {!isRunning ? (
             <button
               onClick={handleStartBenchmark}
-              className="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-cyan-500/20 flex items-center gap-2"
+              className="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-cyan-500/20 flex items-center gap-2 whitespace-nowrap shrink-0"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               Run DataChannel Benchmark
@@ -330,7 +330,7 @@ export const DataChannelBenchmarker: React.FC = () => {
           ) : (
             <button
               onClick={handleStop}
-              className="px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-semibold text-xs transition shadow-sm flex items-center gap-2"
+              className="px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-semibold text-xs transition shadow-sm flex items-center gap-2 whitespace-nowrap shrink-0"
             >
               <Square className="w-3.5 h-3.5 fill-current" />
               Stop Benchmark

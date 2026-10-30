@@ -395,7 +395,7 @@ export const SdpMungerModal: React.FC<SdpMungerModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition"
+            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition whitespace-nowrap shrink-0"
           >
             Cancel
           </button>
@@ -403,7 +403,7 @@ export const SdpMungerModal: React.FC<SdpMungerModalProps> = ({
           <button
             type="button"
             onClick={handleCommit}
-            className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-cyan-500/20"
+            className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-cyan-500/20 whitespace-nowrap shrink-0"
           >
             {appliedNotification ? <Check className="w-4 h-4 text-slate-950" /> : <Wand2 className="w-4 h-4" />}
             {appliedNotification ? 'Applied to Editor!' : `Apply Munged SDP to ${targetTitle}`}
